@@ -33,30 +33,31 @@ function A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n
 		A(a-2,p+2) = y1(m,1);
 
     %%elements from differentials of F3
-    A(a-1,1) = 0;
-		A(a-1,2) = -( R(1,1)*x2(m,1) + R(1,2)*y2(m,1) - R(1,3)*f );
-
-		A(a-1,3) = ( drw(1,1)*x2(m,1) + drw(1,2)*y2(m,1) - drw(1,3)*f )*( ZI(m,1) - BZ ) - ( drw(3,1)*x2(m,1) + drw(3,2)*y2(m,1) - drw(3,3)*f )*( XI(m,1) - BX );
+		A(a-1,1) = ( drw(1,1)*x2(m,1) + drw(1,2)*y2(m,1) - drw(1,3)*f )*( ZI(m,1) - BZ ) - ( drw(3,1)*x2(m,1) + drw(3,2)*y2(m,1) - drw(3,3)*f )*( XI(m,1) - BX );
         
-		A(a-1,4) = ( drp(1,1)*x2(m,1) + drp(1,2)*y2(m,1) - drp(1,3)*f )*( ZI(m,1) - BZ ) - ( drp(3,1)*x2(m,1) + drp(3,2)*y2(m,1) - drp(3,3)*f )*( XI(m,1) - BX );
+		A(a-1,2) = ( drp(1,1)*x2(m,1) + drp(1,2)*y2(m,1) - drp(1,3)*f )*( ZI(m,1) - BZ ) - ( drp(3,1)*x2(m,1) + drp(3,2)*y2(m,1) - drp(3,3)*f )*( XI(m,1) - BX );
         
-		A(a-1,5) = ( drk(1,1)*x2(m,1) + drk(1,2)*y2(m,1) - drk(1,3)*f )*( ZI(m,1) - BZ ) - ( drk(3,1)*x2(m,1) + drk(3,2)*y2(m,1) - drk(3,3)*f )*( XI(m,1) - BX ); 
+		A(a-1,3) = ( drk(1,1)*x2(m,1) + drk(1,2)*y2(m,1) - drk(1,3)*f )*( ZI(m,1) - BZ ) - ( drk(3,1)*x2(m,1) + drk(3,2)*y2(m,1) - drk(3,3)*f )*( XI(m,1) - BX ); 
+    
+    A(a-1,4) = 0;
+		A(a-1,5) = -( R(1,1)*x2(m,1) + R(1,2)*y2(m,1) - R(1,3)*f );
 
-		A(a-1,p) = R(3,1)*x2(m,1) + R(3,2)*y2(m,1) - R(3,3)*f; 
+
+		A(a-1,p) = -( R(3,1)*x2(m,1) + R(3,2)*y2(m,1) - R(3,3)*f ); 
 
 		A(a-1,p+1) = 0;
 		
 		A(a-1,p+2) = R(1,1)*x2(m,1) + R(1,2)*y2(m,1) - R(1,3)*f;
 
     %%elements from differentials of F4
-    A(a,1) = R(3,1)*x2(m,1) + R(3,2)*y2(m,1) - R(3,3)*f;
-		A(a,2) = -( R(2,1)*x2(m,1) + R(2,2)*y2(m,1) - R(2,3)*f );
-
-		A(a,3) = ( drw(2,1)*x2(m,1) + drw(2,2)*y2(m,1) - drw(2,3)*f )*( ZI(m,1) - BZ ) - ( drw(3,1)*x2(m,1) + drw(3,2)*y2(m,1) - drw(3,3)*f )*( YI(m,1) - BY );
+		A(a,1) = ( drw(2,1)*x2(m,1) + drw(2,2)*y2(m,1) - drw(2,3)*f )*( ZI(m,1) - BZ ) - ( drw(3,1)*x2(m,1) + drw(3,2)*y2(m,1) - drw(3,3)*f )*( YI(m,1) - BY );
         
-		A(a,4) = ( drp(2,1)*x2(m,1) + drp(2,2)*y2(m,1) - drp(2,3)*f )*( ZI(m,1) - BZ ) - ( drp(3,1)*x2(m,1) + drp(3,2)*y2(m,1) - drp(3,3)*f )*( YI(m,1) - BY );
+		A(a,2) = ( drp(2,1)*x2(m,1) + drp(2,2)*y2(m,1) - drp(2,3)*f )*( ZI(m,1) - BZ ) - ( drp(3,1)*x2(m,1) + drp(3,2)*y2(m,1) - drp(3,3)*f )*( YI(m,1) - BY );
         
-		A(a,5) = ( drk(2,1)*x2(m,1) + drk(2,2)*y2(m,1) - drk(2,3)*f )*( ZI(m,1) - BZ ) - ( drk(3,1)*x2(m,1) + drk(3,2)*y2(m,1) - drk(3,3)*f )*( YI(m,1) - BY );
+		A(a,3) = ( drk(2,1)*x2(m,1) + drk(2,2)*y2(m,1) - drk(2,3)*f )*( ZI(m,1) - BZ ) - ( drk(3,1)*x2(m,1) + drk(3,2)*y2(m,1) - drk(3,3)*f )*( YI(m,1) - BY );
+    
+    A(a,4) = R(3,1)*x2(m,1) + R(3,2)*y2(m,1) - R(3,3)*f;
+		A(a,5) = -( R(2,1)*x2(m,1) + R(2,2)*y2(m,1) - R(2,3)*f );
 
 		A(a,p) = 0;
 

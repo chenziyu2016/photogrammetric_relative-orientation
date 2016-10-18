@@ -1,11 +1,9 @@
 clc
 
-
-format long;
 % DATA MATRIX
 %photo 1 coordinates
 x1= [
-   0.966
+	 0.966
   -0.798
   -2.511
   92.337
@@ -42,8 +40,7 @@ y2=[
 ];
 
 %focal length of camera (meters) m
-f = 152;
-
+f = 0.152;
 
 %if data points 1 through 6 are the six standard locations, (Von-Gruber points),
  %% and a foward overlap of 60% as well as 25% sidelap assumed:
@@ -63,12 +60,12 @@ k2 = 0 ; % delta kappa 2 dk2
 %% XI and YI to be scaled by a factor BX/92
 XI = [
 	0
- 92
+ 200
 	0
- 92
+ 200
 	0
- 92
-] * 200/92;
+ 200
+];
 
 YI = [
   0
@@ -77,7 +74,7 @@ YI = [
  86.25
 -86.25
 -86.25
-] * 200/92;
+];
 
 ZI = [
 	-f
@@ -86,7 +83,7 @@ ZI = [
 	-f
 	-f
 	-f
-] * 200/92;
+];
 
 %matrix of initial parameters IP
 IP = [
@@ -99,15 +96,15 @@ IP = [
 ];
 
 %rotational matrix R
-R = getR(w2, p2, k2);
+R = getR(w2, p2, k2)
 
 %differentials of rotational elements
 
-drw = getOmegaDiff(w2, p2, k2);
+drw = getOmegaDiff(w2, p2, k2)
 
-drp = getPhiDiff(w2, p2, k2);
+drp = getPhiDiff(w2, p2, k2)
 
-drk = getKappaDiff(w2, p2, k2);
+drk = getKappaDiff(w2, p2, k2)
 
 %number of data points n :
 n = length(x1); %  = len(y1) =len(XI) = len(YI) =len(ZI)!
@@ -117,7 +114,7 @@ n = length(x1); %  = len(y1) =len(XI) = len(YI) =len(ZI)!
 
 A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
 
-L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n)
+L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
 
 dx = getdx(A,L);
 
