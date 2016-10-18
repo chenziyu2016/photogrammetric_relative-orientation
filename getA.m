@@ -2,17 +2,10 @@ function A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n
 	% compute the matrix of coefficients of the unknowns, the A matrix.
 	format short
 
-	% BX = IP(1)
-	% BY = IP(2)
-	% BZ = IP(3)
-	% XI = IP(4)
-	% YI = IP(5)
-	% ZI = IP(6)
-
-
 	A = zeros(n*4,8+3*(n-1));  %dynamically calculate the size of A matrix.
 	%in this case A will be of size (24 by 23) ==> 24 by 8+3*5
 	p=6; %initialize column count for model coords
+	
 	for m = 1:n
 		
 		%index navigations

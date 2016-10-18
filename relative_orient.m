@@ -95,70 +95,59 @@ IP = [
 	ZI
 ];
 
-%Rotational elements rij
-r11 = cos(p2)*cos(k2);  
-r12 = cos(w2)*sin(k2) + sin(w2)*sin(p2)*cos(k2);
-r13 = sin(w2)*sin(k2) - cos(w2)*sin(p2)*cos(k2);
-
-r21 = -cos(p2)*sin(k2);
-r22 = cos(w2)*cos(k2) + cos(w2)*sin(p2)*sin(k2);
-r23 = sin(w2)*cos(k2) + cos(w2)*sin(p2)*sin(k2);
-
-r31 = sin(p2);
-r32 = -sin(w2)*cos(p2);
-r33 = cos(w2)*cos(p2);
-
-R = [
-	r11 r12 r13
-	r21 r22 r23
-	r31 r32 r33
-];
-
-	% replacement elements elements used for shorter code:
-
-	a1 = cos(w2);
-	a2 = cos(p2);
-	a3 = cos(k2);  %cosines of rotational
-
-	b1 = sin(w2);
-	b2 = sin(p2);
-	b3 = sin(k2);  %sines of rotational
-
+%rotational matrix R
+R = getR(w2, p2, k2)
 
 %differentials of rotational elements
-dr11w =  0;                  dr11p = -b2*a3;       dr11k = -a2*b3;
-dr12w = -b1*b3 + a1*b2*a3;   dr12p =  b1*a2*a3;    dr12k =  a1*a3 - b1*b2*b3;
-dr13w =  a1*b3 + b1*b2*a3;   dr13p = -a1*a2*a3;    dr13k =  b1*a3 + a1*b2*b3;
 
-dr21w =  0;                  dr21p =  b2*b3;       dr21k = -a2*a3;
-dr22w = -b1*a3 - a1*b2*b3;   dr22p = -b1*a2*b3;    dr22k = -a1*b3 - b1*b2*a3;
-dr23w =  a1*a3 - b1*b2*b3;   dr23p =  a1*a2*b3;    dr23k = -b1*b3 + a1*b2*a3;
+drw = getOmegaDiff(w2, p2, k2)
 
-dr31w =  0;                  dr31p =  a2;          dr31k = 0;
-dr32w = -a1*a2;              dr32p =  b1*b2;       dr32k = 0;
-dr33w = -b1*a2;              dr33p = -a1*b2;       dr33k = 0;
+drp = getPhiDiff(w2, p2, k2)
 
-drw = [
-	dr11w dr12w dr13w
-	dr21w dr22w dr23w
-	dr31w dr32w dr33w
-];
-
-drp = [
-	dr11p dr12p dr13p
-	dr21p dr22p dr23p
-	dr31p dr32p dr33p
-];
-
-drk = [
-	dr11k dr12k dr13k
-	dr21k dr22k dr23k
-	dr31k dr32k dr33k
-];
+drk = getKappaDiff(w2, p2, k2)
 
 %number of data points n :
 n = length(x1); %  = len(y1) =len(XI) = len(YI) =len(ZI)!
 
-A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n)
 
-L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n)
+%first iteration values
+
+A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
+
+L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
+
+dx = getdx(A,L);
+
+% subsequent iteration to convergence
+while dx - getdx(A,L) ~= zeros(len(dx))
+	% change in unknowns BY, BZ, Omega(w), Phi(p) and Kappa(k) respectively are:
+	cby = dx(1:1)
+	cbz = dx(2:1)
+	cw2 = dx(3:1)
+	cp2 = dx(4:1)
+	ck2 = dx(5:1)
+
+	%modified values:  effecting the changes:: value + change in value.
+		% base components
+	BY = BY + cby
+	BZ = BZ + cbz
+		%rotationals
+	w2 = w2 + cw2
+	p2 = p2 + cp2
+	k2 = k2 + ck2
+ 
+  R = getR(w2, p2, k2)
+	drw = getOmegaDiff(w2, p2, k2)
+	drp = getPhiDiff(w2, p2, k2)
+	drk = getKappaDiff(w2, p2, k2)
+
+	A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
+
+	L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
+
+	dx = getdx(A,L);
+end
+
+
+
+
