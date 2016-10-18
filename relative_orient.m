@@ -1,7 +1,6 @@
 clc
 
-
-format long;
+format long
 % DATA MATRIX
 %photo 1 coordinates
 x1= [
@@ -117,41 +116,63 @@ n = length(x1); %  = len(y1) =len(XI) = len(YI) =len(ZI)!
 
 A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
 
-L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n)
+L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
 
-dx = getdx(A,L);
+dx = getdx(A,L)
 
 % subsequent iteration to convergence
-% while dx - getdx(A,L) ~= zeros(len(dx))
-% 	% change in unknowns BY, BZ, Omega(w), Phi(p) and Kappa(k) respectively are:
-% 	cby = dx(1:1)
-% 	cbz = dx(2:1)
-% 	cw2 = dx(3:1)
-% 	cp2 = dx(4:1)
-% 	ck2 = dx(5:1)
+% while (dx - getdx(A,L) ~= zeros(length(dx),1))
+for i = 1:10
+	% change in unknowns BY, BZ, Omega(w), Phi(p) and Kappa(k) respectively are:
+	cw2 = dx(1:1);
+	cp2 = dx(2:1);
+	ck2 = dx(3:1);
 
-% 	%modified values:  effecting the changes:: value + change in value.
-% 		% base components
-% 	BY = BY + cby
-% 	BZ = BZ + cbz
-% 		%rotationals
-% 	w2 = w2 + cw2
-% 	p2 = p2 + cp2
-% 	k2 = k2 + ck2
-% 	  %rotational matrix R
-%   R = getR(w2, p2, k2)
-% 	  %differential
-% 	drw = getOmegaDiff(w2, p2, k2)
-% 	drp = getPhiDiff(w2, p2, k2)
-% 	drk = getKappaDiff(w2, p2, k2)
+	cBY = dx(4:1);
+	cBZ = dx(5:1);
 
-% 	A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
+	% changes in the model coordinates
+  
+  cXI;  cYI;  cZI;
 
-% 	L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
+	p = 6;
+	for m = 1: 6
 
-% 	dx = getdx(A,L);
-% end
+		cXI(m,1) = dx(p,1);
+		cYI(m,1) = dx(p+1,1);
+	  cZI(m,1) = dx(p+2,1);
 
+	  p = p + 3;
+	end
 
+	%modified values:  effecting the changes:: value + change in value.
 
+	%rotationals
+	w2 = w2 + cw2
+	p2 = p2 + cp2
+	k2 = k2 + ck2
 
+	% base components
+	BY = BY + cBY
+	BZ = BZ + cBZ
+
+	% model coordinates
+	XI = XI + cXI;
+	YI = YI + cYI;
+	ZI = ZI + cZI;
+
+  %rotational matrix R
+  R = getR(w2, p2, k2)
+
+  %differential
+	drw = getOmegaDiff(w2, p2, k2)
+	drp = getPhiDiff(w2, p2, k2)
+	drk = getKappaDiff(w2, p2, k2)
+
+	A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
+
+	L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
+
+	dx = getdx(A,L)
+
+end
