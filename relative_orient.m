@@ -120,59 +120,71 @@ L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
 
 dx = getdx(A,L)
 
+
+% residual matrix v
+v = - L - (A * dx);
+
+sigma = sqrt(v' * v );
+
+exx = sigma * inv(A' * A);
+
+variances = diag(exx);
+
+deviations = sqrt(variances)
+
 % subsequent iteration to convergence
 % while (dx - getdx(A,L) ~= zeros(length(dx),1))
-for i = 1:10
-	% change in unknowns BY, BZ, Omega(w), Phi(p) and Kappa(k) respectively are:
-	cw2 = dx(1:1);
-	cp2 = dx(2:1);
-	ck2 = dx(3:1);
+% for i = 1:10
+% 	% change in unknowns BY, BZ, Omega(w), Phi(p) and Kappa(k) respectively are:
+% 	cw2 = dx(1:1);
+% 	cp2 = dx(2:1);
+% 	ck2 = dx(3:1);
 
-	cBY = dx(4:1);
-	cBZ = dx(5:1);
+% 	cBY = dx(4:1);
+% 	cBZ = dx(5:1);
 
-	% changes in the model coordinates
+% 	% changes in the model coordinates
   
-  cXI;  cYI;  cZI;
+%   cXI;  cYI;  cZI;
 
-	p = 6;
-	for m = 1: 6
+% 	p = 6;
+% 	for m = 1: 6
 
-		cXI(m,1) = dx(p,1);
-		cYI(m,1) = dx(p+1,1);
-	  cZI(m,1) = dx(p+2,1);
+% 		cXI(m,1) = dx(p,1);
+% 		cYI(m,1) = dx(p+1,1);
+% 	  cZI(m,1) = dx(p+2,1);
 
-	  p = p + 3;
-	end
+% 	  p = p + 3;
+% 	end
 
-	%modified values:  effecting the changes:: value + change in value.
+% 	%modified values:  effecting the changes:: value + change in value.
 
-	%rotationals
-	w2 = w2 + cw2
-	p2 = p2 + cp2
-	k2 = k2 + ck2
+% 	%rotationals
+% 	w2 = w2 + cw2
+% 	p2 = p2 + cp2
+% 	k2 = k2 + ck2
 
-	% base components
-	BY = BY + cBY
-	BZ = BZ + cBZ
+% 	% base components
+% 	BY = BY + cBY
+% 	BZ = BZ + cBZ
 
-	% model coordinates
-	XI = XI + cXI;
-	YI = YI + cYI;
-	ZI = ZI + cZI;
+% 	% model coordinates
+% 	XI = XI + cXI;
+% 	YI = YI + cYI;
+% 	ZI = ZI + cZI;
 
-  %rotational matrix R
-  R = getR(w2, p2, k2)
+%   %rotational matrix R
+%   R = getR(w2, p2, k2)
 
-  %differential
-	drw = getOmegaDiff(w2, p2, k2)
-	drp = getPhiDiff(w2, p2, k2)
-	drk = getKappaDiff(w2, p2, k2)
+%   %differential
+% 	drw = getOmegaDiff(w2, p2, k2)
+% 	drp = getPhiDiff(w2, p2, k2)
+% 	drk = getKappaDiff(w2, p2, k2)
 
-	A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
+% 	A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
 
-	L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
+% 	L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
 
-	dx = getdx(A,L)
+% 	dx = getdx(A,L)
 
-end
+% end

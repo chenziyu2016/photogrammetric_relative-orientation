@@ -10,12 +10,14 @@ function dx = getdx(A,L)
 	qxx = inv(N);
 
 	% The error matrix dl
-	dl = A' * W * (-L);
+	dl = A' * W * (-L);   
+    
+    %the -L applied results in the formation of the least square solution 
 	
 	% matrix of unknowns in the order 
-		%% dw2, dp2, dk2, dBX, dBY, dBZ, dXi, dYi, dZi
+		%% dw2, dp2, dk2, dBY, dBZ, dXi, dYi, dZi
 		  %% these unknowns in the matrix dx are computed as change values
 
-  dx = qxx * dl
+  dx = qxx * dl;
   
 end
